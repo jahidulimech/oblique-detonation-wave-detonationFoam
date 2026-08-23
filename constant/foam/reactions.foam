@@ -1,0 +1,446 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  reactions.foam — Burke et al. H2/O2 Kinetic Model
+  
+  Mechanism: Burke et al. (2011) Int. J. Chem. Kinet.
+             19 elementary reactions, 13 species
+\*---------------------------------------------------------------------------*/
+
+reactions
+{
+    R1
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H + O2 = O + OH";
+        A               1.04e+11;
+        beta            0.00;
+        Ta              7705.08;
+    }
+
+    R2a
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "O + H2 = H + OH";
+        A               3.82e+09;
+        beta            0.00;
+        Ta              4000.00;
+    }
+
+    R2b
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "O + H2 = H + OH";
+        A               8.79e+11;
+        beta            0.00;
+        Ta              9647.71;
+    }
+
+    R3
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H2 + OH = H2O + H";
+        A               2.16e+05;
+        beta            1.51;
+        Ta              1726.22;
+    }
+
+    R4
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "OH + OH = O + H2O";
+        A               3.34e+01;
+        beta            2.42;
+        Ta              -971.31;
+    }
+
+    R5
+    {
+        type            irreversibleThirdBodyArrheniusReaction;
+        reaction        "H2 = H + H";
+        A               4.58e+13;
+        beta            -1.40;
+        Ta              52340.21;
+        coeffs          
+13
+(
+(H2 2.5)
+(H2O 12)
+(CO 1.9)
+(CO2 3.8)
+(Ar 0)
+(He 0)
+(H 1)
+(O 1)
+(OH 1)
+(O2 1)
+(HO2 1)
+(H2O2 1)
+(N2 1)
+)
+;
+    }
+
+    R5Ar
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H2 + Ar = H + H + Ar";
+        A               5.84e+12;
+        beta            -1.10;
+        Ta              52340.21;
+    }
+
+    R5He
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H2 + He = H + H + He";
+        A               5.84e+12;
+        beta            -1.10;
+        Ta              52340.21;
+    }
+
+    R6
+    {
+        type            irreversibleThirdBodyArrheniusReaction;
+        reaction        "O + O = O2";
+        A               6.16e+09;
+        beta            -0.50;
+        Ta              0.0;
+        coeffs          
+13
+(
+(H2 2.5)
+(H2O 12)
+(CO 1.9)
+(CO2 3.8)
+(Ar 0)
+(He 0)
+(H 1)
+(O 1)
+(OH 1)
+(O2 1)
+(HO2 1)
+(H2O2 1)
+(N2 1)
+)
+;
+    }
+
+    R6Ar
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "O + O + Ar = O2 + Ar";
+        A               1.89e+07;
+        beta            0.00;
+        Ta              -900.86;
+    }
+
+    R6He
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "O + O + He = O2 + He";
+        A               1.89e+07;
+        beta            0.00;
+        Ta              -900.86;
+    }
+
+    R7
+    {
+        type            irreversibleThirdBodyArrheniusReaction;
+        reaction        "O + H = OH";
+        A               4.71e+12;
+        beta            -1.00;
+        Ta              0.0;
+        coeffs          
+13
+(
+(H2 2.5)
+(H2O 12)
+(CO 1.9)
+(CO2 3.8)
+(Ar 0.75)
+(He 0.75)
+(H 1)
+(O 1)
+(OH 1)
+(O2 1)
+(HO2 1)
+(H2O2 1)
+(N2 1)
+)
+;
+    }
+
+    R8
+    {
+        type            irreversibleThirdBodyArrheniusReaction;
+        reaction        "H2O = H + OH";
+        A               6.06e+21;
+        beta            -3.32;
+        Ta              60795.17;
+        coeffs          
+13
+(
+(H2 3)
+(H2O 0)
+(CO 1.9)
+(CO2 3.8)
+(O2 1.5)
+(N2 2)
+(He 1.1)
+(H 1)
+(O 1)
+(OH 1)
+(HO2 1)
+(H2O2 1)
+(Ar 1)
+)
+;
+    }
+
+    R8H2O
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H2O + H2O = H + OH + H2O";
+        A               1.01e+20;
+        beta            -2.44;
+        Ta              60493.21;
+    }
+
+    R9
+    {
+        type            irreversibleArrheniusTroeFallOff;
+        reaction        "H + O2 = HO2";
+        k0
+        {
+            A           6.37e+14;
+            beta        -1.72;
+            Ta          264.22;
+        }
+        kInf
+        {
+            A           4.65e+09;
+            beta        0.44;
+            Ta          0.0;
+        }
+        F
+        {
+            alpha       0.5;
+            Tsss        1.0e-30;
+            Ts          1.0e+30;
+            Tss         4.503599627e+15;
+        }
+        thirdBodyEfficiencies
+        {
+            coeffs          
+13
+(
+(H2 2)
+(H2O 14)
+(CO 1.9)
+(CO2 3.8)
+(O2 0.78)
+(Ar 0.67)
+(He 0.8)
+(H 1)
+(O 1)
+(OH 1)
+(HO2 1)
+(H2O2 1)
+(N2 1)
+)
+;
+        }
+    }
+/*
+    R9b
+    {
+        type            irreversibleArrheniusTroeFallOff;
+        reaction        "H + O2 = HO2";
+        k0
+        {
+            A           9.04e+13;
+            beta        -1.50;
+            Ta          247.61;
+        }
+        kInf
+        {
+            A           4.65e+09;
+            beta        0.44;
+            Ta          0.0;
+        }
+        F
+        {
+            alpha       0.5;
+            Tsss        1.0e-30;
+            Ts          1.0e+30;
+            Tss         4.503599627e+15;
+        }
+        thirdBodyEfficiencies
+        {
+            coeffs          
+13
+(
+(H2 3)
+(H2O 21)
+(CO 2.7)
+(CO2 5.4)
+(O2 1.1)
+(He 1.2)
+(N2 1.5)
+(H 1)
+(O 1)
+(OH 1)
+(HO2 1)
+(H2O2 1)
+(Ar 1)
+)
+;
+        }
+    }
+*/
+    R10
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "HO2 + H = H2 + O2";
+        A               2.75e+03;
+        beta            2.09;
+        Ta              -730.25;
+    }
+
+    R11
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "HO2 + H = OH + OH";
+        A               7.08e+10;
+        beta            0.00;
+        Ta              148.47;
+    }
+
+    R12
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "HO2 + O = O2 + OH";
+        A               2.85e+07;
+        beta            1.00;
+        Ta              -364.32;
+    }
+
+    R13
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "HO2 + OH = H2O + O2";
+        A               2.89e+10;
+        beta            0.00;
+        Ta              -250.13;
+    }
+
+    R14a
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "HO2 + HO2 = H2O2 + O2";
+        A               4.20e+11;
+        beta            0.00;
+        Ta              6039.26;
+    }
+
+    R14b
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "HO2 + HO2 = H2O2 + O2";
+        A               1.30e+08;
+        beta            0.00;
+        Ta              -820.33;
+    }
+
+    R15
+    {
+        type            irreversibleArrheniusTroeFallOff;
+        reaction        "H2O2 = OH + OH";
+        k0
+        {
+            A           2.49e+18;
+            beta        -2.30;
+            Ta          24534.47;
+        }
+        kInf
+        {
+            A           2.00e+09;
+            beta        0.90;
+            Ta          24534.47;
+        }
+        F
+        {
+            alpha       0.42;
+            Tsss        1.0e-30;
+            Ts          1.0e+30;
+            Tss         4.503599627e+15;
+        }
+        thirdBodyEfficiencies
+        {
+            coeffs          
+13
+(
+(H2O 7.5)
+(H2O2 7.7)
+(CO2 1.6)
+(O2 1.2)
+(N2 1.5)
+(He 0.65)
+(H2 3.7)
+(CO 2.8)
+(H 1)
+(O 1)
+(OH 1)
+(HO2 1)
+(Ar 1)
+)
+;
+        }
+    }
+
+    R16
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H2O2 + H = H2O + OH";
+        A               2.41e+10;
+        beta            0.00;
+        Ta              1997.99;
+    }
+
+    R17
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H2O2 + H = HO2 + H2";
+        A               4.82e+10;
+        beta            0.00;
+        Ta              4001.01;
+    }
+
+    R18
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H2O2 + O = OH + HO2";
+        A               9.55e+03;
+        beta            2.00;
+        Ta              1997.99;
+    }
+
+    R19a
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H2O2 + OH = HO2 + H2O";
+        A               1.74e+09;
+        beta            0.00;
+        Ta              160.04;
+    }
+
+    R19b
+    {
+        type            irreversibleArrheniusReaction;
+        reaction        "H2O2 + OH = HO2 + H2O";
+        A               7.59e+10;
+        beta            0.00;
+        Ta              3658.78;
+    }
+}
+
+// ************************************************************************* //

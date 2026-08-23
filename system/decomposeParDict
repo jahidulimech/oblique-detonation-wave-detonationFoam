@@ -1,0 +1,36 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     |                                                 |
+|   \\  /    A nd           |                                                 |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      decomposeParDict;
+}
+
+// Total cells: 1100 x 1000 = 1,100,000
+// Recommended: 1 core per ~50,000–100,000 cells
+// => 16 cores minimum; 32 cores for reasonable wall-time
+
+numberOfSubdomains  8;
+
+method  scotch;     // graph-based, good load balance for reactive flows
+                    // alternative: hierarchical (faster decomposition)
+
+// If using hierarchical instead of scotch:
+// method  hierarchical;
+// hierarchicalCoeffs
+// {
+//     n           (8 4 1);   // 8 in x, 4 in y, 1 in z  => 32 subdomains
+//     order       xyz;
+//     delta       0.001;
+// }
+
+// ************************************************************************* //

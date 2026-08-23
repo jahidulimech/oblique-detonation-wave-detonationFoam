@@ -1,0 +1,143 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     |                                                 |
+|   \\  /    A nd           |                                                 |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+/*
+  Domain replicates Sun, Yang, Tian & Chen (2023), AIAA Journal,
+  "Evolution and Control of Oblique Detonation Wave Structure in
+  Unsteady Inflow", Sec. II / Fig. 1.
+
+  SI UNITS (meters) throughout, convertToMeters = 1:
+
+      -0.003 m <= x <= 0.03 m ,   0 m <= y <= 0.02 m
+
+  Bottom boundary split exactly at the wedge tip (x = 0):
+    -0.003 <= x <= 0    ->  bottomOutlet   (outflow, avoids tip singularity)
+     0     <= x <= 0.03 ->  wedge          (slip wall)
+
+  Two blocks, split at x = 0, sharing vertices 1,2,5,6 -> automatically
+  merged into one conformal internal face (no mergePatchPairs needed).
+
+  Uniform SQUARE cells everywhere: dx = dy = dz = 8.33333e-05 m (~83.3 um)
+    Block A (bottomOutlet side): 36  x 240 x 1 =  8 640 cells
+    Block B (wedge side)       : 360 x 240 x 1 = 86 400 cells
+    -----------------------------------------------------------
+    TOTAL = 95 040 cells   (< 100 000, as requested)
+
+  This is a COARSE starting mesh. The paper's production grid is
+  dx = dy = 10 um (~6.6 million cells). To refine later, scale Nx1,
+  Nx2, Ny together keeping the ratio 3 : 30 : 20 (e.g. x2, x3, x4 ...)
+  so dx = dy is preserved and patch topology is untouched.
+
+  Patch names match boundaryField entries used in 0/ files exactly:
+  inlet, top, outlet, bottomOutlet, wedge, frontAndBack.
+*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// ************************************************************************* //
+
+convertToMeters 1;   // vertex coordinates below are already in meters (SI)
+
+vertices
+(
+    (-0.003  0      0          )   // 0
+    ( 0      0      0          )   // 1
+    ( 0      0.02   0          )   // 2
+    (-0.003  0.02   0          )   // 3
+    (-0.003  0      8.33333e-05)   // 4
+    ( 0      0      8.33333e-05)   // 5
+    ( 0      0.02   8.33333e-05)   // 6
+    (-0.003  0.02   8.33333e-05)   // 7
+    ( 0.03   0      0          )   // 8
+    ( 0.03   0.02   0          )   // 9
+    ( 0.03   0      8.33333e-05)   // 10
+    ( 0.03   0.02   8.33333e-05)   // 11
+);
+
+blocks
+(
+    // Block A : -0.003 <= x <= 0   (bottomOutlet side, near wedge tip)
+    hex (0 1 2 3 4 5 6 7)   (25  170 1) simpleGrading (1 1 1)
+
+    // Block B :  0  <= x <= 0.03   (wedge side)
+    hex (1 8 9 2 5 10 11 6) (255 170 1) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+    inlet
+    {
+        type    patch;
+        faces
+        (
+            (0 4 7 3)
+        );
+    }
+
+    top
+    {
+        type    patch;
+        faces
+        (
+            (3 7 6 2)
+            (2 6 11 9)
+        );
+    }
+
+    outlet
+    {
+        type    patch;
+        faces
+        (
+            (8 9 11 10)
+        );
+    }
+
+    bottomOutlet
+    {
+        type    patch;
+        faces
+        (
+            (0 1 5 4)
+        );
+    }
+
+    wedge
+    {
+        type    wall;
+        faces
+        (
+            (1 8 10 5)
+        );
+    }
+
+    frontAndBack
+    {
+        type    empty;
+        faces
+        (
+            (0 3 2 1)
+            (1 2 9 8)
+            (4 5 6 7)
+            (5 10 11 6)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //
